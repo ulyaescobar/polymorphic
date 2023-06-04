@@ -1,0 +1,43 @@
+# fly.toml app configuration file generated for ulya on 2023-05-21T15:15:21+07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "ulya"
+primary_region = "sin"
+console_command = "/rails/bin/rails console"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[statics]]
+  guest_path = "/rails/public"
+  url_prefix = "/"
+
+[build]
+  # Gunakan buildpacks berikut untuk mengatur aplikasi Ruby/Rails
+  # Jika Anda telah menggunakan buildpack sebelumnya, hapus atau modifikasi sesuai kebutuhan.
+  buildpacks = [
+    "https://github.com/heroku/heroku-buildpack-ruby"
+  ]
+
+  # Konfigurasi environment variables yang akan dimuat dari secret
+  [[build.env]]
+    secret = "dotenv"
+
+[experimental]
+  # Tambahkan opsi `private_network=true` jika Anda perlu mengakses sumber daya internal jaringan Fly.io
+  # private_network = true
+
+  # Tambahkan opsi `secret_volume_mounts` jika Anda perlu menggunakan secret sebagai file yang ter-mount dalam kontainer
+  # secret_volume_mounts = ["/path/on/container:/path/in/container"]
+
+# Konfigurasi secrets
+[secrets]
+  [secrets.dotenv]
+    source = ".env"
+
